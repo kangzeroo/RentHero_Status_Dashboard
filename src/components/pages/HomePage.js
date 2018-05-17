@@ -10,14 +10,17 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
-
+import IntentsDistributions from '../intents_distribution/IntentsDistributions'
+import DateRange from '../modules/DateRange'
 
 class HomePage extends Component {
+
 
 	render() {
 		return (
 			<div id='HomePage' style={comStyles().container}>
-				HomePage
+				HomePage a
+				<IntentsDistributions />
 			</div>
 		)
 	}
@@ -57,7 +60,8 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
+
 		}
 	}
 }

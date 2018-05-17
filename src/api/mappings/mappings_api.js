@@ -1,9 +1,9 @@
 import axios from 'axios'
 import authHeaders from '../authHeaders'
 
-export const getDomainMappings = (node_env, mapName) => {
+export const getDomainMappings = (node_env, fileName) => {
   const p = new Promise((res, rej) => {
-    axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/knowledge_domains/${node_env.toLowerCase()}/${mapName}`, authHeaders())
+    axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/knowledge_domains/${node_env.toLowerCase()}/${fileName}`, authHeaders())
       .then((data) => {
         console.log(data)
         res(data.data)
@@ -15,63 +15,35 @@ export const getDomainMappings = (node_env, mapName) => {
   return p
 }
 
-export const getBasicFormMappings = (node_env) => {
-  const p = new Promise((res, rej) => {
-    const x = [
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/dialogflow/${node_env.toLowerCase()}/basic_typeform/basic_elastic_dialog_map.json`, authHeaders()),
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/typeforms/${node_env.toLowerCase()}/basic_typeform/basic_typeform_elastic_map.json`, authHeaders())
-    ]
-    Promise.all(x)
-      .then((data) => {
-        console.log(data)
-        const maps = data.map((d) => {
-          return d.data
-        })
-        res(maps)
-      })
-      .catch((err) => {
-        rej(err)
-      })
-  })
-  return p
-}
+const domains = [
+  { key: 1, name: 'geo', fileName: 'geo_intents.json' },
+  { key: 2, name: 'searching', fileName: 'searching_intents.json' },
+  { key: 3, name: 'meta', fileName: 'meta_intents.json' },
+  { key: 4, name: 'general', fileName: 'general_intents.json' },
+  { key: 5, name: 'tours', fileName: 'tours_intents.json' },
+  { key: 6, name: 'specific_struc', fileName: 'specific_struc_intents.json' },
+  { key: 7, name: 'specific_unstruc', fileName: 'specific_unstruc_intents.json' },
+  { key: 8, name: 'init', fileName: 'init_intents.json' },
+]
 
-export const getAdvancedFormMappings = (node_env) => {
+export const getAllDomainIntents = (node_env) => {
+  console.log('Grabbing all domain intents...')
   const p = new Promise((res, rej) => {
-    const x = [
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/dialogflow/${node_env.toLowerCase()}/advanced_typeform/advanced_elastic_dialog_map.json`, authHeaders()),
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/typeforms/${node_env.toLowerCase()}/advanced_typeform/advanced_typeform_elastic_map.json`, authHeaders())
-    ]
-    Promise.all(x)
-      .then((data) => {
-        const maps = data.map((d) => {
-          return d.data
-        })
-        res(maps)
+    const x = domains.map((domain) => {
+      return getDomainMappings(node_env, domain.fileName)
+    })
+    Promise.all(x).then((data) => {
+      // console.log(data)
+      let allIntents = []
+      data.map((domain) => {
+        allIntents = allIntents.concat(domain.relationships)
       })
-      .catch((err) => {
-        rej(err)
-      })
-  })
-  return p
-}
-
-export const getSeekingFormMappings = (node_env) => {
-  const p = new Promise((res, rej) => {
-    const x = [
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/dialogflow/${node_env.toLowerCase()}/seeking_typeform/seeking_elastic_dialog_map.json`, authHeaders()),
-      axios.get(`https://s3.amazonaws.com/renthero-ai-mappings/typeforms/${node_env.toLowerCase()}/seeking_typeform/seeking_typeform_elastic_map.json`, authHeaders())
-    ]
-    Promise.all(x)
-      .then((data) => {
-        const maps = data.map((d) => {
-          return d.data
-        })
-        res(maps)
-      })
-      .catch((err) => {
-        rej(err)
-      })
+      // console.log(allIntents)
+      res(allIntents)
+    }).catch((err) => {
+      console.log(err)
+      rej(err)
+    })
   })
   return p
 }

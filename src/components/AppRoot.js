@@ -14,17 +14,19 @@ import {
 } from 'react-router-dom'
 import 'font-awesome/css/font-awesome.css'
 import 'antd-mobile/dist/antd-mobile.css'
+import 'antd/dist/antd.css'
 import AppRootMechanics from './AppRootMechanics'
 import HeaderBar from './HeaderBar'
 import HomePage from './pages/HomePage'
-import IntentsDistributions from './pages/IntentsDistributions'
+import IntentsDistributions from './intents_distribution/IntentsDistributions'
+
 
 class AppRoot extends Component {
 
 	render() {
     return (
       <div>
-        <Header />
+        <HeaderBar />
         <Switch>
 
           <Route exact path='/' render={HomePage} />
