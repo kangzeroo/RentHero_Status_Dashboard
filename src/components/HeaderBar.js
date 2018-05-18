@@ -49,9 +49,31 @@ class HeaderBar extends Component {
     )
 	}
 
+	renderPagesDropdown() {
+		const menu = (
+			<Menu>
+				<Menu.Item key='1' onClick={() => this.props.history.push('/')}>Home</Menu.Item>
+				<Menu.Item key='2' onClick={() => this.props.history.push('/intents/distribution')}>Intents Distribution</Menu.Item>
+				<Menu.Item key='3' onClick={() => this.props.history.push('/intents/timeline')}>Intent Timeline</Menu.Item>
+			</Menu>
+		)
+	return (
+		<div>
+			<Dropdown overlay={menu}>
+			 <Button style={{ marginLeft: 8 }}>
+				 Select Page <Icon type='down' />
+			 </Button>
+			</Dropdown>
+		</div>
+	)
+	}
+
 	render() {
 		return (
 			<div id='HeaderBar' style={comStyles().container}>
+				{
+					this.renderPagesDropdown()
+				}
 				<h2 style={{ color: 'white' }}>RentHero Status Dashboard</h2>
 				{
 					this.renderNodeEnvDropdown()

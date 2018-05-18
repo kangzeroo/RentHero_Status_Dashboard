@@ -11,6 +11,7 @@ import {
 
 } from 'antd-mobile'
 import { getIntentsDistribution } from '../../api/intents/intents_api'
+import IntentTimeline from '../intents_timeline/IntentTimeline'
 
 class BarChart extends Component {
 
@@ -113,6 +114,14 @@ class BarChart extends Component {
 		return (
 			<div id='BarChart' style={comStyles().container}>
 				<div id='chart'></div>
+        <br />
+        {
+          this.state.intents && this.state.intents.length > 1
+          ?
+          <IntentTimeline intents={this.state.intents} />
+          :
+          null
+        }
 			</div>
 		)
 	}
