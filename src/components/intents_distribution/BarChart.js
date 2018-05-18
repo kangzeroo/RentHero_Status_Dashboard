@@ -7,11 +7,11 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import {
-
-} from 'antd-mobile'
-import { getIntentsDistribution } from '../../api/intents/intents_api'
+import { } from 'antd-mobile'
 import IntentTimeline from '../intents_timeline/IntentTimeline'
+import { getIntentsDistribution } from '../../api/intents/intents_api'
+import IntentsDistributions from '../SelectContent/IntentsDistributions'
+import {changeAllIntents} from '../../actions/intents/intent_actions'
 
 class BarChart extends Component {
 
@@ -40,12 +40,14 @@ class BarChart extends Component {
     getIntentsDistribution(this.props.node_env)
       .then((intents) => {
         console.log(intents)
-        return this.setState({
+        this.setState({
           intents,
           distribution: this.calculateDist(intents)
         })
+        return intents
       })
-      .then(() => {
+      .then((intents) => {
+        this.props.changeAllIntents(intents)
         this.renderChart()
       })
       .catch((err) => {
@@ -111,8 +113,10 @@ class BarChart extends Component {
   }
 
 	render() {
+
 		return (
 			<div id='BarChart' style={comStyles().container}>
+        <IntentsDistributions />
 				<div id='chart'></div>
         <br />
         {
@@ -130,11 +134,12 @@ class BarChart extends Component {
 // defines the types of constiables in this.props
 BarChart.propTypes = {
 	history: PropTypes.object.isRequired,
+  all_Intents: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
 BarChart.defaultProps = {
-
+  all_Intents: []
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -144,13 +149,14 @@ const RadiumHOC = Radium(BarChart)
 const mapReduxToProps = (redux) => {
 	return {
     node_env: redux.app.node_env,
+    all_Intents: redux.intents.all_Intents,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+		changeAllIntents,
 	})(RadiumHOC)
 )
 
