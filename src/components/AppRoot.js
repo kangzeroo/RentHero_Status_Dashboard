@@ -18,7 +18,7 @@ import 'antd/dist/antd.css'
 import AppRootMechanics from './AppRootMechanics'
 import HeaderBar from './HeaderBar'
 import HomePage from './pages/HomePage'
-import IntentsDistributions from './pages/IntentsDistributions'
+import IntentsDistributions from './SelectContent/IntentsDistributions'
 import BarChart from './pages/BarChart'
 
 class AppRoot extends Component {
