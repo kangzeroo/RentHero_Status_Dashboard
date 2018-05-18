@@ -18,8 +18,8 @@ import 'antd/dist/antd.css'
 import AppRootMechanics from './AppRootMechanics'
 import HeaderBar from './HeaderBar'
 import HomePage from './pages/HomePage'
-import IntentsDistributions from './SelectContent/IntentsDistributions'
-import BarChart from './intents_distribution/BarChart'
+import IntentDistribution from './intents_distribution/IntentDistribution'
+import IntentTimeline from './intents_timeline/IntentTimeline'
 
 class AppRoot extends Component {
 
@@ -30,8 +30,8 @@ class AppRoot extends Component {
         <Switch>
 
           <Route exact path='/' render={HomePage} />
-          <Route exact path='/intents/distribution' render={BarChart} />
-          <Route exact path='/intents/timeline' render={BarChart} />
+          <Route exact path='/intents/distribution' render={IntentDistribution} />
+          <Route exact path='/intents/timeline' render={IntentTimeline} />
 
         </Switch>
       </div>

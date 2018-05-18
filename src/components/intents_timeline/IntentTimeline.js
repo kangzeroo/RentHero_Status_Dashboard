@@ -26,9 +26,9 @@ class IntentTimeline extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.intents)
+    console.log(this.props.all_intents)
     const sessions = []
-    this.props.intents.forEach((int) => {
+    this.props.all_intents.forEach((int) => {
       let exists = false
       sessions.forEach((sid) => {
         if (sid === int.session_id) {
@@ -48,7 +48,7 @@ class IntentTimeline extends Component {
   changedSession(sid) {
     this.setState({ session_id: sid })
     this.setState({
-      filtered_intents: this.props.intents.filter((int) => {
+      filtered_intents: this.props.all_intents.filter((int) => {
         return int.session_id === sid
       }).sort((a, b) => {
         return moment(b.timestamp).valueOf() < moment(a.timestamp).valueOf()
@@ -59,6 +59,7 @@ class IntentTimeline extends Component {
 	render() {
 		return (
 			<div id='IntentTimeline' style={comStyles().container}>
+        Pick a conversation session:
         <Select
           showSearch
           style={{ width: 200 }}
@@ -87,7 +88,7 @@ class IntentTimeline extends Component {
 // defines the types of variables in this.props
 IntentTimeline.propTypes = {
 	history: PropTypes.object.isRequired,
-  intents: PropTypes.array.isRequired,
+  all_intents: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -101,7 +102,7 @@ const RadiumHOC = Radium(IntentTimeline)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    all_intents: redux.intents.all_intents
 	}
 }
 

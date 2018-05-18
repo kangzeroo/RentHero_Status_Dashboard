@@ -1,4 +1,4 @@
-// Compt for copying as a HomePage
+// Compt for copying as a SelectDateRange
 // This compt is used for...
 
 import React, { Component } from 'react'
@@ -10,42 +10,58 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
+import { changeSelectedDates } from '../../../actions/intents/intent_actions'
+import { DatePicker } from 'antd'
 
-class HomePage extends Component {
+const { RangePicker } = DatePicker
+
+
+class SelectDateRange extends Component {
+
+	constructor(){
+		super()
+		this.state = {
+      start: null,
+      stop: null,
+    }
+	}
 
 	render() {
+
 		return (
-			<div id='HomePage' style={comStyles().container}>
-				Home Page
+			<div id='SelectDateRange' style={comStyles().container}>
+			<RangePicker
+	      showTime={{ format: 'HH:mm' }}
+	      format="YYYY-MM-DD HH:mm"
+	      placeholder={['Start Time', 'End Time']}
+	      onOk={(value) => this.setState({ start: value[0], stop: value[1] })}
+	    />
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-HomePage.propTypes = {
+SelectDateRange.propTypes = {
 	history: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-HomePage.defaultProps = {
-
+SelectDateRange.defaultProps = {
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(HomePage)
+const RadiumHOC = Radium(SelectDateRange)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
 	})(RadiumHOC)
 )
 
