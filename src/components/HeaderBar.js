@@ -10,14 +10,52 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
+import { Button, Menu, Dropdown, Icon, message } from 'antd'
+import { changeNodeEnv } from '../actions/app/app_actions'
 
 
 class HeaderBar extends Component {
 
+	renderNodeEnvDropdown() {
+      const handleMenuClick = (e) => {
+        if (e.key == '.$1'){
+          message.info('Development')
+          this.props.changeNodeEnv('development')
+        }
+        else if (e.key == '.$2') {
+          message.info('Staging')
+          this.props.changeNodeEnv('staging')
+        }
+        else if (e.key == '.$3') {
+          message.info('Production')
+          this.props.changeNodeEnv('production')
+        }
+      }
+      const menu = (
+        <Menu onClick={handleMenuClick}>
+          <Menu.Item key='1'>DEVELOPMENT</Menu.Item>
+          <Menu.Item key='2'>STAGING</Menu.Item>
+          <Menu.Item key='3'>PRODUCTION</Menu.Item>
+        </Menu>
+      )
+    return (
+      <div>
+        <Dropdown overlay={menu}>
+         <Button style={{ marginLeft: 8 }}>
+           {this.props.node_env} <Icon type='down' />
+         </Button>
+        </Dropdown>
+      </div>
+    )
+	}
+
 	render() {
 		return (
 			<div id='HeaderBar' style={comStyles().container}>
-				HeaderBar dev - staging - prod
+				<h2 style={{ color: 'white' }}>RentHero Status Dashboard</h2>
+				{
+					this.renderNodeEnvDropdown()
+				}
 			</div>
 		)
 	}
@@ -39,14 +77,14 @@ const RadiumHOC = Radium(HeaderBar)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+		node_env: redux.app.node_env,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+		changeNodeEnv,
 	})(RadiumHOC)
 )
 
@@ -58,6 +96,11 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			padding: '10px',
+			backgroundColor: '#2faded',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
 		}
 	}
 }
