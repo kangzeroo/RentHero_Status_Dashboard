@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { getIntentsDistribution } from '../api/intents/intents_api'
+import { changeAllIntents, saveUniqueIntents } from '../actions/intents/intent_actions'
 
 // this 'higher order component'(HOC) creator takes a component (called ComposedComponent)
 // and returns a new component with added functionality
@@ -11,7 +13,51 @@ export default (ComposedComponent) => {
 	class AppRootMechanics extends Component {
 
     componentWillMount() {
+			setInterval(() => {
+				this.loadIntentDistribution()
+			}, 120000)
+			this.loadUniqueIntents()
     }
+
+		componentDidUpdate(prevProps, prevState) {
+	    if (prevProps.node_env !== this.props.node_env) {
+	      this.loadIntentDistribution()
+				this.loadUniqueIntents()
+	    }
+	  }
+
+		loadUniqueIntents() {
+			getIntentsDistribution(this.props.node_env)
+				.then((intents) => {
+					const unique_intents = []
+			    intents.forEach((int) => {
+			      let exists = false
+			      unique_intents.forEach((u) => {
+			        if (u.intent_id === int.intent_id) {
+			          exists = true
+			        }
+			      })
+			      if (!exists) {
+			        unique_intents.push(int)
+			      }
+			    })
+			    console.log(unique_intents)
+					this.props.saveUniqueIntents(unique_intents)
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
+
+		loadIntentDistribution() {
+			getIntentsDistribution(this.props.node_env)
+	      .then((intents) => {
+	        this.props.changeAllIntents(intents)
+	      })
+	      .catch((err) => {
+	        console.log(err)
+	      })
+		}
 
 		render() {
 			// the rendered composed component, with props passed through
@@ -31,6 +77,7 @@ export default (ComposedComponent) => {
 
 	const mapStateToProps = (redux) => {
 		return {
+			node_env: redux.app.node_env,
 		}
 	}
 
@@ -38,6 +85,8 @@ export default (ComposedComponent) => {
 	// we can actually nest HOC infinitely deep
 	return withRouter(
 		connect(mapStateToProps, {
+			changeAllIntents,
+			saveUniqueIntents,
     })(AppRootMechanics)
 	)
 }

@@ -1,13 +1,17 @@
+import moment from 'moment'
 import {
   CHANGE_CHOSEN_INTENTS,
   CHANGE_ALL_INTENTS,
   CHANGE_SELECTED_DATES,
+  SET_UNIQUE_INTENTS,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
   all_intents: [],
+  unique_intents: [],
   chosen_intents: [],
-  selected_dates:[],
+  min_date: moment(),
+  max_date: moment(),
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -26,6 +30,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selected_dates: action.payload,
+      }
+    case SET_UNIQUE_INTENTS:
+      return {
+        ...state,
+        unique_intents: action.payload,
       }
 		default:
 			return {

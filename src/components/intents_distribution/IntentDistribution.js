@@ -1,4 +1,4 @@
-// Compt for copying as a BarChart
+// Compt for copying as a IntentDistribution
 // This compt is used for...
 
 import React, { Component } from 'react'
@@ -10,49 +10,33 @@ import { withRouter } from 'react-router-dom'
 import { } from 'antd-mobile'
 import IntentTimeline from '../intents_timeline/IntentTimeline'
 import { getIntentsDistribution } from '../../api/intents/intents_api'
-import IntentsDistributions from '../SelectContent/IntentsDistributions'
+import SelectIntents from './modules/SelectIntents'
+import SelectDateRange from './modules/SelectDateRange'
 import {changeAllIntents} from '../../actions/intents/intent_actions'
 
-class BarChart extends Component {
+class IntentDistribution extends Component {
 
   constructor() {
     super()
     this.state = {
-      intents: [],
       distribution: []
     }
   }
 
   componentDidMount() {
-    this.getIntents()
-    setInterval(() => {
-      this.getIntents()
-    }, 120000)
+    this.calcDist()
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.node_env !== this.props.node_env) {
-      this.getIntents()
+    if (prevProps.all_intents !== this.props.all_intents) {
+      this.calcDist()
     }
   }
 
-  getIntents() {
-    getIntentsDistribution(this.props.node_env)
-      .then((intents) => {
-        console.log(intents)
-        this.setState({
-          intents,
-          distribution: this.calculateDist(intents)
-        })
-        return intents
-      })
-      .then((intents) => {
-        this.props.changeAllIntents(intents)
-        this.renderChart()
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  calcDist() {
+    this.setState({
+      distribution: this.calculateDist(this.props.all_intents)
+    }, () => this.renderChart())
   }
 
   calculateDist(intents) {
@@ -115,41 +99,37 @@ class BarChart extends Component {
 	render() {
 
 		return (
-			<div id='BarChart' style={comStyles().container}>
-        <IntentsDistributions />
-				<div id='chart'></div>
+			<div id='IntentDistribution' style={comStyles().container}>
+        <SelectIntents />
+        <SelectDateRange />
         <br />
-        {
-          this.state.intents && this.state.intents.length > 1
-          ?
-          <IntentTimeline intents={this.state.intents} />
-          :
-          null
-        }
+        <br />
+        <br />
+				<div id='chart'></div>
 			</div>
 		)
 	}
 }
 
 // defines the types of constiables in this.props
-BarChart.propTypes = {
+IntentDistribution.propTypes = {
 	history: PropTypes.object.isRequired,
-  all_Intents: PropTypes.array.isRequired,
+  all_intents: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
-BarChart.defaultProps = {
-  all_Intents: []
+IntentDistribution.defaultProps = {
+  all_intents: []
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(BarChart)
+const RadiumHOC = Radium(IntentDistribution)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
     node_env: redux.app.node_env,
-    all_Intents: redux.intents.all_Intents,
+    all_intents: redux.intents.all_intents,
 	}
 }
 
