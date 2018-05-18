@@ -11,13 +11,14 @@ import {
 
 } from 'antd-mobile'
 
+import IntentsDistributions from '../SelectContent/IntentsDistributions'
 
 class HomePage extends Component {
 
 	render() {
 		return (
 			<div id='HomePage' style={comStyles().container}>
-				HomePage
+				<IntentsDistributions/>
 			</div>
 		)
 	}
