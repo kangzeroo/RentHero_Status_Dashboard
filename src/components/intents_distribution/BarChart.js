@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import { } from 'antd-mobile'
+import IntentTimeline from '../intents_timeline/IntentTimeline'
 import { getIntentsDistribution } from '../../api/intents/intents_api'
 import IntentsDistributions from '../SelectContent/IntentsDistributions'
 import {changeAllIntents} from '../../actions/intents/intent_actions'
@@ -117,6 +118,14 @@ class BarChart extends Component {
 			<div id='BarChart' style={comStyles().container}>
         <IntentsDistributions />
 				<div id='chart'></div>
+        <br />
+        {
+          this.state.intents && this.state.intents.length > 1
+          ?
+          <IntentTimeline intents={this.state.intents} />
+          :
+          null
+        }
 			</div>
 		)
 	}
