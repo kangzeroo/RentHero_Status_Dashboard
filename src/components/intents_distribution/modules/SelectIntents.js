@@ -19,7 +19,35 @@ class IntentsDistributions extends Component {
 	constructor(){
 		super()
 		this.state = {
+			checked: []
    	}
+	}
+
+	updateChecked(e){
+		console.log(e)
+		console.log(this.state.checked)
+		this.doshit(e)
+		.then(() => {
+			console.log(this.state.checked)
+			this.props.changeChosenIntents(this.state.checked)
+		})
+
+
+	}
+
+	doshit(e) {
+		const p = new Promise((res, rej) => {
+			if (this.state.checked.map((ele) => ele === e.target.value).length > 0) {
+				console.log('exists')
+				this.setState({checked: this.state.checked.filter((ele) =>  ele !== e.target.value)})
+				res()
+			} else{
+				console.log('dne')
+				this.setState({checked: this.state.checked.concat([e.target.value]) })
+				res()
+			}
+		})
+		return p
 	}
 
 	render() {
@@ -29,7 +57,7 @@ class IntentsDistributions extends Component {
 					{
 						this.props.unique_intents.map((u) => {
 							return (
-								<Checkbox onChange={(e) => console.log(e)}>{u.intent_name}</Checkbox>
+								<Checkbox value={u.intent_id} onChange={(e) => this.updateChecked(e)}>{u.intent_name}</Checkbox>
 							)
 						})
 					}
@@ -43,10 +71,13 @@ class IntentsDistributions extends Component {
 IntentsDistributions.propTypes = {
 	history: PropTypes.object.isRequired,
 	unique_intents: PropTypes.array.isRequired,
+	chosen_intents: PropTypes.array.isRequired,
+	changeChosenIntents: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 IntentsDistributions.defaultProps = {
+
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -56,6 +87,7 @@ const RadiumHOC = Radium(IntentsDistributions)
 const mapReduxToProps = (redux) => {
 	return {
 		unique_intents: redux.intents.unique_intents,
+		chosen_intents:redux.intents.chosen_intents,
 	}
 }
 
