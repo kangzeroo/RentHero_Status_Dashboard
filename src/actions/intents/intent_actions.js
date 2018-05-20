@@ -24,11 +24,11 @@ export const changeAllIntents = (allIntents) => {
   }
 }
 
-export const changeSelectedDates = (selectedDates) => {
+export const changeSelectedDates = ({ min_date, max_date }) => {
   return (dispatch) => {
     dispatch({
       type: CHANGE_SELECTED_DATES,
-      payload: selectedDates,
+      payload: { min_date, max_date },
     })
   }
 }

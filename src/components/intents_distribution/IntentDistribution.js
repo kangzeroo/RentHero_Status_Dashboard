@@ -40,7 +40,6 @@ class IntentDistribution extends Component {
   }
 
   calculateDist(intents) {
-    console.log(intents)
     const distribution = {}
     intents.forEach((int) => {
       distribution[int.intent_name] = {
@@ -49,23 +48,19 @@ class IntentDistribution extends Component {
       }
     })
     const unique_intents = Object.keys(distribution)
-    console.log(unique_intents)
     unique_intents.forEach((intent_name) => {
       const count = intents.filter((i) => {
         return i.intent_name === intent_name
       }).length
       distribution[intent_name].count = count
     })
-    console.log(distribution)
     const x = Object.keys(distribution).map((key) => {
       return distribution[key]
     })
-    console.log(x)
     return x
   }
 
   renderChart() {
-    console.log('renderChart')
     google.charts.load('current', {'packages':['bar']})
     google.charts.setOnLoadCallback(() => {
       // Create the data table.
@@ -75,7 +70,6 @@ class IntentDistribution extends Component {
       this.state.distribution.forEach((intent) => {
         x.push([intent.intent_name, intent.count, '#b87333', `${intent.count}`])
       })
-      console.log(x)
       const data = google.visualization.arrayToDataTable(x)
 
       // Set chart options
@@ -100,12 +94,11 @@ class IntentDistribution extends Component {
 
 		return (
 			<div id='IntentDistribution' style={comStyles().container}>
-        <SelectIntents />
         <SelectDateRange />
-        <br />
-        <br />
-        <br />
+        <br /><br />
 				<div id='chart'></div>
+        <br /><br />
+        <SelectIntents />
 			</div>
 		)
 	}

@@ -10,8 +10,8 @@ const INITIAL_STATE = {
   all_intents: [],
   unique_intents: [],
   chosen_intents: [],
-  min_date: moment(),
-  max_date: moment(),
+  min_date: moment().subtract(1, 'days'),
+  max_date: moment().add(1, 'hours'),
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -29,7 +29,8 @@ export default (state = INITIAL_STATE, action) => {
     case CHANGE_SELECTED_DATES:
       return {
         ...state,
-        selected_dates: action.payload,
+        min_date: action.payload.min_date,
+        max_date: action.payload.max_date
       }
     case SET_UNIQUE_INTENTS:
       return {

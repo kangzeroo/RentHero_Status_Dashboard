@@ -17,25 +17,33 @@ const { RangePicker } = DatePicker
 
 
 class SelectDateRange extends Component {
-
-	constructor(){
-		super()
-		this.state = {
-      start: null,
-      stop: null,
-    }
-	}
-
 	render() {
 
 		return (
 			<div id='SelectDateRange' style={comStyles().container}>
-			<RangePicker
-	      showTime={{ format: 'HH:mm' }}
-	      format="YYYY-MM-DD HH:mm"
-	      placeholder={['Start Time', 'End Time']}
-	      onOk={(value) => this.setState({ start: value[0], stop: value[1] })}
-	    />
+				<DatePicker
+          format="YYYY-MM-DD h:mm a"
+          showTime
+          value={this.props.min_date}
+          placeholder="Start Date"
+          onChange={(a, b) => this.props.changeSelectedDates({ min_date: a, max_date: this.props.max_date })}
+          size='large'
+          style={screen.width < 550 ? { width: '80%'} : { width: '50%' }}
+        />
+				&nbsp;
+				&nbsp;
+				<p style={{ margin: 0, fontWeight: 'bold', }}>to</p>
+				&nbsp;
+				&nbsp;
+        <DatePicker
+          format="YYYY-MM-DD h:mm a"
+          showTime
+          value={this.props.max_date}
+          placeholder="End Date"
+          onChange={(a, b) => this.props.changeSelectedDates({ min_date: this.props.max_date, max_date: a })}
+          size='large'
+          style={screen.width < 550 ? { width: '80%'} : { width: '50%' }}
+        />
 			</div>
 		)
 	}
@@ -56,12 +64,15 @@ const RadiumHOC = Radium(SelectDateRange)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
+		min_date: redux.intents.min_date,
+		max_date: redux.intents.max_date,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
+		changeSelectedDates,
 	})(RadiumHOC)
 )
 
@@ -72,7 +83,7 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
 		}
 	}
 }

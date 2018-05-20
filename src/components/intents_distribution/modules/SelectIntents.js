@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
+import { Input } from 'antd'
 import { changeChosenIntents} from '../../../actions/intents/intent_actions'
 import { Checkbox } from 'antd'
 
@@ -19,7 +20,8 @@ class IntentsDistributions extends Component {
 	constructor(){
 		super()
 		this.state = {
-			checked: []
+			checked: [],
+			search_string: '',
    	}
 	}
 
@@ -53,11 +55,15 @@ class IntentsDistributions extends Component {
 	render() {
 		return (
 			<div id='IntentsDistributions' style={comStyles().container}>
-				<div style={{ borderBottom: '1px solid #E9E9E9' }}>
+				<Input.Search placeholder='Filter Intents' value={this.state.search_string} onChange={(v) => this.setState({ search_string: v.target.value })} />
+				<br />
+				<div style={{ borderBottom: '1px solid #E9E9E9', display: 'flex', flexDirection: 'column' }}>
 					{
-						this.props.unique_intents.map((u) => {
+						this.props.unique_intents.filter((u) => {
+							return u.intent_name.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1
+						}).map((u) => {
 							return (
-								<Checkbox value={u.intent_id} onChange={(e) => this.updateChecked(e)}>{u.intent_name}</Checkbox>
+								<Checkbox key={u.intent_id} value={u.intent_id} onChange={(e) => this.updateChecked(e)}>{u.intent_name}</Checkbox>
 							)
 						})
 					}
@@ -106,6 +112,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			width: '400px',
 		}
 	}
 }

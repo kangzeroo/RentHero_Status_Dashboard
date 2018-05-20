@@ -12,17 +12,17 @@ import { changeAllIntents, saveUniqueIntents } from '../actions/intents/intent_a
 export default (ComposedComponent) => {
 	class AppRootMechanics extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
 			setInterval(() => {
-				this.loadIntentDistribution()
+				this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
 			}, 120000)
+			this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
 			this.loadUniqueIntents()
     }
 
 		componentDidUpdate(prevProps, prevState) {
-	    if (prevProps.node_env !== this.props.node_env) {
-	      this.loadIntentDistribution()
-				this.loadUniqueIntents()
+	    if (prevProps.node_env !== this.props.node_env || prevProps.min_date !== this.props.min_date || prevProps.max_date !== this.props.max_date) {
+	      this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
 	    }
 	  }
 
@@ -49,8 +49,8 @@ export default (ComposedComponent) => {
 				})
 		}
 
-		loadIntentDistribution() {
-			getIntentsDistribution(this.props.node_env)
+		loadIntentDistribution(node_env, min_date, max_date) {
+			getIntentsDistribution(node_env, min_date, max_date)
 	      .then((intents) => {
 	        this.props.changeAllIntents(intents)
 	      })
@@ -78,6 +78,8 @@ export default (ComposedComponent) => {
 	const mapStateToProps = (redux) => {
 		return {
 			node_env: redux.app.node_env,
+			min_date: redux.intents.min_date,
+			max_date: redux.intents.max_date,
 		}
 	}
 

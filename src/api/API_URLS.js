@@ -4,10 +4,10 @@
 // LOCAL
 
 // DEV
-// export const STATUS_MS = 'https://ecf86a70.ngrok.io'
+export const STATUS_MS = 'https://1e75ca36.ngrok.io'
 
 // PROD
 // export const STATUS_MS = 'https://4564gfh.ngrok.io'
 //
 // // STAGING
-export const STATUS_MS = 'https://renthero.host:8501'
+// export const STATUS_MS = 'https://renthero.host:8501'
