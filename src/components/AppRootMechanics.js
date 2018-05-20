@@ -14,15 +14,15 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
 			setInterval(() => {
-				this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
+				this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString(), this.props.chosen_intents)
 			}, 120000)
-			this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
+			this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString(), this.props.chosen_intents)
 			this.loadUniqueIntents()
     }
 
 		componentDidUpdate(prevProps, prevState) {
-	    if (prevProps.node_env !== this.props.node_env || prevProps.min_date !== this.props.min_date || prevProps.max_date !== this.props.max_date) {
-	      this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString())
+	    if (prevProps.node_env !== this.props.node_env || prevProps.min_date !== this.props.min_date || prevProps.max_date !== this.props.max_date || prevProps.chosen_intents !== this.props.chosen_intents) {
+	      this.loadIntentDistribution(this.props.node_env, this.props.min_date.toISOString(), this.props.max_date.toISOString(), this.props.chosen_intents)
 	    }
 	  }
 
@@ -49,8 +49,8 @@ export default (ComposedComponent) => {
 				})
 		}
 
-		loadIntentDistribution(node_env, min_date, max_date) {
-			getIntentsDistribution(node_env, min_date, max_date)
+		loadIntentDistribution(node_env, min_date, max_date, chosen_intents) {
+			getIntentsDistribution(node_env, min_date, max_date, chosen_intents)
 	      .then((intents) => {
 	        this.props.changeAllIntents(intents)
 	      })
@@ -80,6 +80,7 @@ export default (ComposedComponent) => {
 			node_env: redux.app.node_env,
 			min_date: redux.intents.min_date,
 			max_date: redux.intents.max_date,
+			chosen_intents: redux.intents.chosen_intents,
 		}
 	}
 

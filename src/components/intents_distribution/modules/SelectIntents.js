@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
-import { Input } from 'antd'
+import { Input, Button } from 'antd'
 import { changeChosenIntents} from '../../../actions/intents/intent_actions'
 import { Checkbox } from 'antd'
 
@@ -25,37 +25,41 @@ class IntentsDistributions extends Component {
    	}
 	}
 
-	updateChecked(e){
-		console.log(e)
-		console.log(this.state.checked)
-		this.doshit(e)
-		.then(() => {
-			console.log(this.state.checked)
-			this.props.changeChosenIntents(this.state.checked)
+	componentWillMount() {
+		this.setState({
+			checked: this.props.chosen_intents
 		})
-
-
 	}
 
-	doshit(e) {
-		const p = new Promise((res, rej) => {
-			if (this.state.checked.map((ele) => ele === e.target.value).length > 0) {
-				console.log('exists')
-				this.setState({checked: this.state.checked.filter((ele) =>  ele !== e.target.value)})
-				res()
-			} else{
-				console.log('dne')
-				this.setState({checked: this.state.checked.concat([e.target.value]) })
-				res()
-			}
-		})
-		return p
+	updateChecked(id){
+		const x = this.state.checked.filter((c) => {
+			return c === id
+		}).length
+		if (x > 0) {
+			this.setState({
+				checked: this.state.checked.filter((c) => {
+					return c !== id
+				})
+			})
+		} else {
+			this.setState({
+				checked: this.state.checked.concat([id])
+			})
+		}
+	}
+
+	submitIntents() {
+		this.props.changeChosenIntents(this.state.checked)
 	}
 
 	render() {
 		return (
 			<div id='IntentsDistributions' style={comStyles().container}>
-				<Input.Search placeholder='Filter Intents' value={this.state.search_string} onChange={(v) => this.setState({ search_string: v.target.value })} />
+				<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<Input.Search placeholder='Filter Intents' value={this.state.search_string} onChange={(v) => this.setState({ search_string: v.target.value })} />
+					<Button type='primary' onClick={() => this.submitIntents()}>Filter Intents</Button>
+				</div>
+				<br />
 				<br />
 				<div style={{ borderBottom: '1px solid #E9E9E9', display: 'flex', flexDirection: 'column' }}>
 					{
@@ -63,7 +67,7 @@ class IntentsDistributions extends Component {
 							return u.intent_name.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1
 						}).map((u) => {
 							return (
-								<Checkbox key={u.intent_id} value={u.intent_id} onChange={(e) => this.updateChecked(e)}>{u.intent_name}</Checkbox>
+								<Checkbox key={u.intent_id} value={u.intent_id} checked={this.state.checked.filter((id) => id === u.intent_id).length > 0} onClick={() => this.updateChecked(u.intent_id)}>{u.intent_name}</Checkbox>
 							)
 						})
 					}
