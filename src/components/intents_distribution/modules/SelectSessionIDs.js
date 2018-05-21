@@ -73,9 +73,15 @@ class SelectSessionIDs extends Component {
 	render() {
 		return (
 			<div id='SelectSessionIDs' style={comStyles().container}>
+				<h2>Filter Sessions</h2>
+				<h4>Only 1 filter can apply at a time</h4>
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
 					<Input.Search placeholder='Filter Sessions' value={this.state.search_string} onChange={(v) => this.setState({ search_string: v.target.value })} />
 					<Button type='primary' onClick={() => this.filterSessions()}>Filter Sessions</Button>
+				</div>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+					<Button onClick={() => this.setState({ chosen_sessions: this.uniqueSessions(this.props.all_intents) })}>Select All</Button>
+					<Button onClick={() => this.setState({ chosen_sessions: [] })}>Unselect All</Button>
 				</div>
         <br /><br />
         <div style={{ borderBottom: '1px solid #E9E9E9', display: 'flex', flexDirection: 'column' }}>

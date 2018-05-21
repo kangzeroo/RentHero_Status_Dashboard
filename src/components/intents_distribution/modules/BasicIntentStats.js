@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
-import { Button } from 'antd'
+import { Button, Modal } from 'antd'
 
 
 class BasicIntentStats extends Component {
@@ -18,7 +18,7 @@ class BasicIntentStats extends Component {
   constructor() {
     super()
     this.state = {
-      show_counts: false
+      visible: false,
     }
   }
 
@@ -106,27 +106,28 @@ class BasicIntentStats extends Component {
     				<h2>{this.totalTenants(this.props.intents)}</h2>
             <h5>Total Tenants</h5>
           </div>
+          <Button onClick={() => this.setState({ visible: !this.state.visible })} style={{ width: '200px' }}>{ this.state.visible ? 'HIDE COUNTS' : 'SHOW COUNTS' }</Button>
         </div>
-        <Button onClick={() => this.setState({ show_counts: !this.state.show_counts })}>
-          { this.state.show_counts ? 'HIDE COUNTS' : 'SHOW COUNTS' }
-        </Button>
-        {
-          this.state.show_counts
-          ?
-          this.props.distribution.sort((a, b) => {
-            return a.count < b.count
-          }).map((intent) => {
-            return (
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <h3>{intent.count}</h3>
-                &nbsp;
-                <h4>{intent.intent_name}</h4>
-              </div>
-            )
-          })
-          :
-          null
-        }
+        <Modal
+          title='Basic Modal'
+          visible={this.state.visible}
+          onOk={() => this.setState({ visible: false })}
+          onCancel={() => this.setState({ visible: false })}
+        >
+          {
+            this.props.distribution.sort((a, b) => {
+              return a.count < b.count
+            }).map((intent) => {
+              return (
+                <div key={intent.intent_name} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <h3>{intent.count}</h3>
+                  &nbsp; - &nbsp;
+                  <h4>{intent.intent_name}</h4>
+                </div>
+              )
+            })
+          }
+        </Modal>
 			</div>
 		)
 	}
@@ -170,7 +171,6 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       height: 'auto',
-      minHeight: '200px',
 		},
 		statbar: {
       display: 'flex',

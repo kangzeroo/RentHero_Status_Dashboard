@@ -69,6 +69,8 @@ class IntentsDistributions extends Component {
 	render() {
 		return (
 			<div id='IntentsDistributions' style={comStyles().container}>
+				<h2>Filter Intents</h2>
+				<h4>Will cause a refresh, takes 10 seconds</h4>
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
 					<Input.Search placeholder='Filter Intents' value={this.state.search_string} onChange={(v) => this.setState({ search_string: v.target.value })} />
 					<Button type='primary' onClick={() => this.submitIntents()}>Filter Intents</Button>

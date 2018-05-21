@@ -101,18 +101,16 @@ class IntentDistribution extends Component {
 		return (
 			<div id='IntentDistribution' style={comStyles().container}>
         <BasicIntentStats distribution={this.state.distribution} intents={this.props.selected_intents} />
-        <br /><br /><br /><br />
+        <br /><br />
+        <SelectDateRange />
+        <br /><br />
 				<div id='chart'></div>
           <br /><br />
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <SelectDateRange />
-            <br /><br />
-            <SelectIntents />
-          </div>
-          <SelectSessionIDs />
+          <SelectIntents />
           <SelectAdIDs />
           <SelectTenantIDs />
+          <SelectSessionIDs />
         </div>
 			</div>
 		)
