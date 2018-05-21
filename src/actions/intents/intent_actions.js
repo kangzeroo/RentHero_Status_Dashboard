@@ -1,8 +1,9 @@
 import {
   CHANGE_CHOSEN_INTENTS,
-  CHANGE_ALL_INTENTS,
+  SET_ALL_INTENTS,
   CHANGE_SELECTED_DATES,
   SET_UNIQUE_INTENTS,
+  CHANGE_SELECTED_INTENTS,
 } from '../action_types'
 
 
@@ -18,7 +19,7 @@ export const changeChosenIntents = (chosenIntents) => {
 export const changeAllIntents = (allIntents) => {
   return (dispatch) => {
     dispatch({
-      type: CHANGE_ALL_INTENTS,
+      type: SET_ALL_INTENTS,
       payload: allIntents,
     })
   }
@@ -38,6 +39,15 @@ export const saveUniqueIntents = (uniques) => {
     dispatch({
       type: SET_UNIQUE_INTENTS,
       payload: uniques,
+    })
+  }
+}
+
+export const changeSelectedIntents = (intents) => {
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_SELECTED_INTENTS,
+      payload: intents
     })
   }
 }

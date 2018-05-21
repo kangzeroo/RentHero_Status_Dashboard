@@ -12,6 +12,10 @@ import IntentTimeline from '../intents_timeline/IntentTimeline'
 import { getIntentsDistribution } from '../../api/intents/intents_api'
 import SelectIntents from './modules/SelectIntents'
 import SelectDateRange from './modules/SelectDateRange'
+import BasicIntentStats from './modules/BasicIntentStats'
+import SelectSessionIDs from './modules/SelectSessionIDs'
+import SelectAdIDs from './modules/SelectAdIDs'
+import SelectTenantIDs from './modules/SelectTenantIDs'
 import {changeAllIntents} from '../../actions/intents/intent_actions'
 
 class IntentDistribution extends Component {
@@ -28,14 +32,14 @@ class IntentDistribution extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.all_intents !== this.props.all_intents) {
+    if (prevProps.selected_intents !== this.props.selected_intents) {
       this.calcDist()
     }
   }
 
   calcDist() {
     this.setState({
-      distribution: this.calculateDist(this.props.all_intents)
+      distribution: this.calculateDist(this.props.selected_intents)
     }, () => this.renderChart())
   }
 
@@ -56,6 +60,8 @@ class IntentDistribution extends Component {
     })
     const x = Object.keys(distribution).map((key) => {
       return distribution[key]
+    }).sort((a, b) => {
+      return a.count < b.count
     })
     return x
   }
@@ -94,11 +100,18 @@ class IntentDistribution extends Component {
 
 		return (
 			<div id='IntentDistribution' style={comStyles().container}>
+        <BasicIntentStats distribution={this.state.distribution} intents={this.props.selected_intents} />
+        <br /><br />
         <SelectDateRange />
         <br /><br />
 				<div id='chart'></div>
-        <br /><br />
-        <SelectIntents />
+          <br /><br />
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+          <SelectIntents />
+          <SelectAdIDs />
+          <SelectTenantIDs />
+          <SelectSessionIDs />
+        </div>
 			</div>
 		)
 	}
@@ -107,12 +120,12 @@ class IntentDistribution extends Component {
 // defines the types of constiables in this.props
 IntentDistribution.propTypes = {
 	history: PropTypes.object.isRequired,
-  all_intents: PropTypes.array.isRequired,
+  selected_intents: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
 IntentDistribution.defaultProps = {
-  all_intents: []
+  selected_intents: []
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -122,7 +135,7 @@ const RadiumHOC = Radium(IntentDistribution)
 const mapReduxToProps = (redux) => {
 	return {
     node_env: redux.app.node_env,
-    all_intents: redux.intents.all_intents,
+    selected_intents: redux.intents.selected_intents,
 	}
 }
 
