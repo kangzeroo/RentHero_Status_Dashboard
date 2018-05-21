@@ -50,7 +50,7 @@ export default (ComposedComponent) => {
 		}
 
 		loadIntentDistribution(node_env, min_date, max_date, chosen_intents) {
-			getIntentsDistribution(node_env, min_date, max_date, chosen_intents)
+			getIntentsDistribution(node_env, min_date, max_date, chosen_intents.map((c) => c.intent_id))
 	      .then((intents) => {
 	        this.props.changeAllIntents(intents)
 	      })

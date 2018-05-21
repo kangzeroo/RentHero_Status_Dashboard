@@ -11,7 +11,7 @@ import {
 
 } from 'antd-mobile'
 import { Input, Button } from 'antd'
-import { changeChosenIntents} from '../../../actions/intents/intent_actions'
+import { changeChosenIntents, chooseAllIntents } from '../../../actions/intents/intent_actions'
 import { Checkbox } from 'antd'
 
 
@@ -31,25 +31,39 @@ class IntentsDistributions extends Component {
 		})
 	}
 
-	updateChecked(id){
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.chosen_intents !== this.props.chosen_intents) {
+			this.setState({
+				checked: this.props.chosen_intents
+			})
+		}
+	}
+
+	updateChecked(intent){
 		const x = this.state.checked.filter((c) => {
-			return c === id
+			return c.intent_id === intent.intent_id
 		}).length
 		if (x > 0) {
 			this.setState({
 				checked: this.state.checked.filter((c) => {
-					return c !== id
+					return c.intent_id !== intent.intent_id
 				})
 			})
 		} else {
 			this.setState({
-				checked: this.state.checked.concat([id])
+				checked: this.state.checked.concat([intent])
 			})
 		}
 	}
 
 	submitIntents() {
 		this.props.changeChosenIntents(this.state.checked)
+	}
+
+	selectAll(bool) {
+		this.setState({
+			checked: bool ? this.props.unique_intents : []
+		}, () => console.log(this.state))
 	}
 
 	render() {
@@ -60,6 +74,10 @@ class IntentsDistributions extends Component {
 					<Button type='primary' onClick={() => this.submitIntents()}>Filter Intents</Button>
 				</div>
 				<br />
+				<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<Button onClick={() => this.selectAll(true)}>Select All</Button>
+					<Button onClick={() => this.selectAll(false)}>Unselect All</Button>
+				</div>
 				<br />
 				<div style={{ borderBottom: '1px solid #E9E9E9', display: 'flex', flexDirection: 'column' }}>
 					{
@@ -67,7 +85,7 @@ class IntentsDistributions extends Component {
 							return u.intent_name.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1
 						}).map((u) => {
 							return (
-								<Checkbox key={u.intent_id} value={u.intent_id} checked={this.state.checked.filter((id) => id === u.intent_id).length > 0} onClick={() => this.updateChecked(u.intent_id)}>{u.intent_name}</Checkbox>
+								<Checkbox key={u.intent_id} checked={this.state.checked.filter((c) => c.intent_id === u.intent_id).length > 0} onClick={() => this.updateChecked(u)}>{u.intent_name}</Checkbox>
 							)
 						})
 					}
@@ -104,7 +122,8 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-		changeChosenIntents
+		changeChosenIntents,
+		chooseAllIntents,
 	})(RadiumHOC)
 )
 

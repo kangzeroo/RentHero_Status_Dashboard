@@ -28,7 +28,7 @@ class SelectDateRange extends Component {
           placeholder="Start Date"
           onChange={(a, b) => this.props.changeSelectedDates({ min_date: a, max_date: this.props.max_date })}
           size='large'
-          style={screen.width < 550 ? { width: '80%'} : { width: '50%' }}
+          style={{ width: '200px' }}
         />
 				&nbsp;
 				&nbsp;
@@ -42,7 +42,7 @@ class SelectDateRange extends Component {
           placeholder="End Date"
           onChange={(a, b) => this.props.changeSelectedDates({ min_date: this.props.max_date, max_date: a })}
           size='large'
-          style={screen.width < 550 ? { width: '80%'} : { width: '50%' }}
+          style={{ width: '200px' }}
         />
 			</div>
 		)
