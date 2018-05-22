@@ -16,7 +16,7 @@ class HomePage extends Component {
 	render() {
 		return (
 			<div id='HomePage' style={comStyles().container}>
-				Home Page
+				<iframe src='https://search-renthero-intents-mfb4bx6dwwpbqxdssfg2ocbcum.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/2a7ec850-5df6-11e8-ac6f-c752a838516e?embed=true&_g=(refreshInterval%3A(display%3AOff%2Cpause%3A!f%2Cvalue%3A0)%2Ctime%3A(from%3Anow-24h%2Cmode%3Aquick%2Cto%3Anow))' height='1000px' width='100%'></iframe>
 			</div>
 		)
 	}
