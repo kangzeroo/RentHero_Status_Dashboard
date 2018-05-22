@@ -5,6 +5,7 @@ import {
   CHANGE_SELECTED_DATES,
   SET_UNIQUE_INTENTS,
   CHANGE_SELECTED_INTENTS,
+  CHANGE_SESSION_CONVO,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -12,6 +13,7 @@ const INITIAL_STATE = {
   selected_intents: [],
   unique_intents: [],
   chosen_intents: [],
+  session_convo: [],
   min_date: moment().subtract(1, 'days'),
   max_date: moment().add(1, 'hours'),
 }
@@ -59,6 +61,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selected_intents: action.payload,
+      }
+    case CHANGE_SESSION_CONVO:
+      return {
+        ...state,
+        session_convo: action.payload,
       }
 		default:
 			return {
