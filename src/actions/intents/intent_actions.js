@@ -4,6 +4,7 @@ import {
   CHANGE_SELECTED_DATES,
   SET_UNIQUE_INTENTS,
   CHANGE_SELECTED_INTENTS,
+  CHANGE_SESSION_CONVO,
 } from '../action_types'
 
 
@@ -39,6 +40,15 @@ export const saveUniqueIntents = (uniques) => {
     dispatch({
       type: SET_UNIQUE_INTENTS,
       payload: uniques,
+    })
+  }
+}
+
+export const changeSessionConvo = (sessionConvo) => {
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_SESSION_CONVO,
+      payload: sessionConvo,
     })
   }
 }

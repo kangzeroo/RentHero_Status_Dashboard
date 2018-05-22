@@ -7,6 +7,8 @@ import {
 import Store from './store'
 import AppRoot from './components/AppRoot'
 
+import './test'
+
 // root of the frontend application
 // <BrowserRouter> defines routing using react-router 4
 // <Provider> defines the Redux store

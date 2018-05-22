@@ -20,6 +20,7 @@ import HeaderBar from './HeaderBar'
 import HomePage from './pages/HomePage'
 import IntentDistribution from './intents_distribution/IntentDistribution'
 import IntentTimeline from './intents_timeline/IntentTimeline'
+import IntentConvolog from './intents_convolog/IntentConvolog'
 
 class AppRoot extends Component {
 
@@ -32,6 +33,7 @@ class AppRoot extends Component {
           <Route exact path='/' render={HomePage} />
           <Route exact path='/intents/distribution' render={IntentDistribution} />
           <Route exact path='/intents/timeline' render={IntentTimeline} />
+          <Route exact path='/intents/convolog' render={IntentConvolog} />
 
         </Switch>
       </div>
