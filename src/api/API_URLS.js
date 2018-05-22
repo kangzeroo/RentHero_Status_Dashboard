@@ -4,7 +4,7 @@
 // LOCAL
 
 // DEV
-export const STATUS_MS = 'https://968d3163.ngrok.io'
+export const STATUS_MS = 'https://c9972839.ngrok.io'
 
 // PROD
 // export const STATUS_MS = 'https://4564gfh.ngrok.io'

@@ -11,7 +11,10 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'antd-mobile'
-import { Select } from 'antd'
+import { Input, Button } from 'antd'
+import { getTimelineIntents, getMessagesForSession } from '../../api/timeline/timeline_api'
+import { changeAllIntents } from '../../actions/intents/intent_actions'
+import DistributionGraph from '../intents_distribution/modules/DistributionGraph'
 
 
 class IntentTimeline extends Component {
@@ -20,66 +23,54 @@ class IntentTimeline extends Component {
     super()
     this.state = {
       session_id: '',
-      sessions: [],
-      filtered_intents: []
+      ad_id: '',
+      identity_id: '',
+      messages: [],
     }
   }
 
-  componentDidMount() {
-    console.log(this.props.all_intents)
-    const sessions = []
-    this.props.all_intents.forEach((int) => {
-      let exists = false
-      sessions.forEach((sid) => {
-        if (sid === int.session_id) {
-          exists = true
-        }
-      })
-      if (!exists) {
-        sessions.push(int.session_id)
-      }
+  grabIntents() {
+    getTimelineIntents({
+      session_id: this.state.session_id,
+      ad_id: this.state.ad_id,
+      identity_id: this.state.identity_id,
+      node_env: this.props.node_env,
+    }).then((data) => {
+      console.log(data)
+      this.props.changeAllIntents(data.intents)
+    }).catch((err) => {
+      console.log(err)
     })
-    console.log(sessions)
-    this.setState({
-      sessions: sessions
-    }, () => console.log(this.state))
   }
 
-  changedSession(sid) {
-    this.setState({ session_id: sid })
-    this.setState({
-      filtered_intents: this.props.all_intents.filter((int) => {
-        return int.session_id === sid
-      }).sort((a, b) => {
-        return moment(b.timestamp).valueOf() < moment(a.timestamp).valueOf()
-      })
-    })
+  grabMessages(session_id) {
+    if (session_id) {
+      getMessagesForSession(session_id)
+        .then((data) => {
+          this.setState({
+            messages: data
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    } else {
+      alert('No session ID provided!')
+    }
   }
 
 	render() {
 		return (
 			<div id='IntentTimeline' style={comStyles().container}>
-        Pick a conversation session:
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder='Select by session_id'
-          onChange={(sid) => this.changedSession(sid)}
-        >
-          {
-            this.state.sessions.map((sid) => {
-              return (<Select.Option value={sid}>{sid}</Select.Option>)
-            })
-          }
-        </Select>
-        <br />
-        {
-          this.state.filtered_intents.map((i) => {
-            return (
-              <div key={i.timestamp}>{`${moment(i.timestamp).format('MMMM Do YYYY, h:mm:ss a')}: ${i.intent_name}`}</div>
-            )
-          })
-        }
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '500px', height: '200px' }}>
+          <Input.Search placeholder='By Ad ID' value={this.state.ad_id} onChange={(v) => this.setState({ ad_id: v.target.value })} />
+          <Input.Search placeholder='By Tenant ID' value={this.state.identity_id} onChange={(v) => this.setState({ identity_id: v.target.value })} />
+          <Input.Search placeholder='By Session ID (required for convos)' value={this.state.session_id} onChange={(v) => this.setState({ session_id: v.target.value })} />
+          <Button type='primary' onClick={() => this.grabIntents()}>Get Intents</Button>
+          <Button type='primary' onClick={() => this.grabMessages(this.state.session_id)}>Get Messages</Button>
+        </div>
+        <br /><br />
+        <DistributionGraph intents={this.props.selected_intents} />
 			</div>
 		)
 	}
@@ -88,7 +79,7 @@ class IntentTimeline extends Component {
 // defines the types of variables in this.props
 IntentTimeline.propTypes = {
 	history: PropTypes.object.isRequired,
-  all_intents: PropTypes.array.isRequired,
+  selected_intents: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -102,14 +93,15 @@ const RadiumHOC = Radium(IntentTimeline)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    all_intents: redux.intents.all_intents
+    selected_intents: redux.intents.selected_intents,
+    node_env: redux.app.node_env,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    changeAllIntents,
 	})(RadiumHOC)
 )
 
@@ -121,6 +113,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
 		}
 	}
 }
