@@ -57,3 +57,17 @@ export const getSessionsForTenant = ({ tenant_id, node_env }) => {
   })
   return p
 }
+
+export const getSessionsForLead = ({ lead_id, node_env }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${STATUS_MS}/sessions_for_lead`, { lead_id, node_env }, authHeaders())
+      .then((data) => {
+        console.log(data)
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
