@@ -5,7 +5,7 @@
 
 // DEV
 
-export const STATUS_MS = 'https://289ab190.ngrok.io'
+export const STATUS_MS = 'https://1a54bd0b.ngrok.io'
 // PROD
 // export const STATUS_MS = 'https://4564gfh.ngrok.io'
 //
