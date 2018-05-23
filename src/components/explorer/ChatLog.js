@@ -9,8 +9,8 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
-} from 'antd-mobile'
+	Timeline, Icon
+} from 'antd'
 
 
 class ChatLog extends Component {
@@ -19,15 +19,17 @@ class ChatLog extends Component {
 		return (
 			<div id='ChatLog' style={comStyles().container}>
         <h1>{`Conversation History for Session ${this.props.session_id}`}</h1>
-        {
-          this.props.messages.sort((a, b) => {
-            return moment(a.DATETIME).valueOf() > moment(b.DATETIME).valueOf()
-          }).map((msg) => {
-            return (
-              <div key={msg.MESSAGE_ID}>{moment(msg.DATETIME).valueOf()} - {msg.SENDER_TYPE}: <b>{msg.MESSAGE}</b></div>
-            )
-          })
-        }
+				<Timeline>
+	        {
+	          this.props.messages.sort((a, b) => {
+	            return moment(a.DATETIME) - moment(b.DATETIME)
+	          }).map((msg) => {
+	            return (
+	              <Timeline.Item key={msg.MESSAGE_ID} dot={ <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> } color="red"> { msg.MESSAGE_ID }  - { moment(msg.DATETIME).toISOString() } - { msg.MESSAGE } </Timeline.Item>
+	            )
+	          })
+	        }
+				</Timeline>
 			</div>
 		)
 	}
