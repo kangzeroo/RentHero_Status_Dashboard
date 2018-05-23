@@ -56,6 +56,7 @@ class HeaderBar extends Component {
 				<Menu.Item key='2' onClick={() => this.props.history.push('/intents/distribution')}>Intents Distribution</Menu.Item>
 				<Menu.Item key='3' onClick={() => this.props.history.push('/intents/timeline')}>Intent Timeline</Menu.Item>
 				<Menu.Item key='4' onClick={() => this.props.history.push('/intents/convolog')}>Intent ConvoLog</Menu.Item>
+				<Menu.Item key='5' onClick={() => this.props.history.push('/explorer')}>Explorer</Menu.Item>
 			</Menu>
 		)
 	return (
