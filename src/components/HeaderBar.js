@@ -52,10 +52,12 @@ class HeaderBar extends Component {
 	renderPagesDropdown() {
 		const menu = (
 			<Menu>
-				<Menu.Item key='1' onClick={() => this.props.history.push('/')}>Home</Menu.Item>
-				<Menu.Item key='2' onClick={() => this.props.history.push('/intents/distribution')}>Intents Distribution</Menu.Item>
-				<Menu.Item key='3' onClick={() => this.props.history.push('/intents/timeline')}>Intent Timeline</Menu.Item>
-				<Menu.Item key='4' onClick={() => this.props.history.push('/explorer')}>Explorer</Menu.Item>
+				<Menu.Item key='1' onClick={() => this.props.history.push('/explorer')}>Explorer</Menu.Item>
+				<Menu.Item key='2' onClick={() => this.props.history.push('/tenants/dashboard')}>Tenants Dashboard</Menu.Item>
+				<Menu.Item key='3' onClick={() => this.props.history.push('/ads/dashboard')}>Ads Dashboard</Menu.Item>
+				<Menu.Item key='4' onClick={() => this.props.history.push('/intents/dashboard')}>Intents Dashboard</Menu.Item>
+				<Menu.Item key='5' onClick={() => this.props.history.push('/intents/distribution')}>Intents Distribution</Menu.Item>
+				<Menu.Item key='6' onClick={() => this.props.history.push('/intents/timeline')}>Intent Timeline</Menu.Item>
 			</Menu>
 		)
 	return (

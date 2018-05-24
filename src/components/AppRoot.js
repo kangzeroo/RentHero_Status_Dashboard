@@ -17,7 +17,9 @@ import 'antd-mobile/dist/antd-mobile.css'
 import 'antd/dist/antd.css'
 import AppRootMechanics from './AppRootMechanics'
 import HeaderBar from './HeaderBar'
-import HomePage from './pages/HomePage'
+import AdsDashboard from './pages/AdsDashboard'
+import IntentsDashboard from './pages/IntentsDashboard'
+import TenantsDashboard from './pages/TenantsDashboard'
 import IntentDistribution from './intents_distribution/IntentDistribution'
 import IntentTimeline from './intents_timeline/IntentTimeline'
 import EverythingExplorer from './explorer/EverythingExplorer'
@@ -31,7 +33,10 @@ class AppRoot extends Component {
         <HeaderBar />
         <Switch>
 
-          <Route exact path='/' render={HomePage} />
+          <Route exact path='/' render={IntentsDashboard} />
+          <Route exact path='/ads/dashboard' render={AdsDashboard} />
+          <Route exact path='/tenants/dashboard' render={TenantsDashboard} />
+          <Route exact path='/intents/dashboard' render={IntentsDashboard} />
           <Route exact path='/intents/distribution' render={IntentDistribution} />
           <Route exact path='/intents/timeline' render={IntentTimeline} />
           <Route exact path='/explorer' render={EverythingExplorer} />
